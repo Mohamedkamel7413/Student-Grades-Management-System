@@ -4,7 +4,7 @@
 // STORAGE_KEY
 // اسم المفتاح اللي بنحفظ تحته بيانات الطلاب في localStorage
 // =======================================================
-const STORAGE_KEY = "grades_manager_students_v1";
+let STORAGE_KEY = "grades_manager_students_v1";
 
 
 // =======================================================
@@ -24,22 +24,22 @@ let studentIdBeingEdited = null;
 // -------------------------------------------------------
 // هنا بنمسك كل عناصر الـ HTML اللي هنستخدمها في JavaScript
 // =======================================================
-const studentForm = document.getElementById("studentForm");
+let studentForm = document.querySelector("#studentForm");
 
-const studentNameInput = document.getElementById("nameInput");
-const mathGradeInput = document.getElementById("mathInput");
-const englishGradeInput = document.getElementById("englishInput");
-const scienceGradeInput = document.getElementById("scienceInput");
+let studentNameInput = document.querySelector("#nameInput");
+let mathGradeInput = document.querySelector("#mathInput");
+let englishGradeInput = document.querySelector("#englishInput");
+let scienceGradeInput = document.querySelector("#scienceInput");
 
-const addStudentErrorText = document.getElementById("errorMsg");
-const studentsTableBody = document.getElementById("studentsTbody");
+let addStudentErrorText = document.querySelector("#errorMsg");
+let studentsTableBody = document.querySelector("#studentsTbody");
 
-const clearFormButton = document.getElementById("clearBtn");
-const resetAllButton = document.getElementById("resetAllBtn");
+let clearFormButton = document.querySelector("#clearBtn");
+let resetAllButton = document.querySelector("#resetAllBtn");
 
-const searchByNameInput = document.getElementById("searchInput");
-const sortModeSelect = document.getElementById("sortSelect");
-const tableStatsLine = document.getElementById("statsLine");
+let searchByNameInput = document.querySelector("#searchInput");
+let sortModeSelect = document.querySelector("#sortSelect");
+let tableStatsLine = document.querySelector("#statsLine");
 
 
 // =======================================================
@@ -47,16 +47,16 @@ const tableStatsLine = document.getElementById("statsLine");
 // -------------------------------------------------------
 // عناصر المودال اللي بنستخدمها في تعديل الطالب
 // =======================================================
-const editStudentModalElement = document.getElementById("editModal");
-const editStudentModal = new bootstrap.Modal(editStudentModalElement);
+let editStudentModalElement = document.querySelector("#editModal");
+let editStudentModal = new bootstrap.Modal(editStudentModalElement);
 
-const editStudentNameInput = document.getElementById("editName");
-const editMathGradeInput = document.getElementById("editMath");
-const editEnglishGradeInput = document.getElementById("editEnglish");
-const editScienceGradeInput = document.getElementById("editScience");
+let editStudentNameInput = document.querySelector("#editName");
+let editMathGradeInput = document.querySelector("#editMath");
+let editEnglishGradeInput = document.querySelector("#editEnglish");
+let editScienceGradeInput = document.querySelector("#editScience");
 
-const editStudentErrorText = document.getElementById("editError");
-const saveEditButton = document.getElementById("saveEditBtn");
+let editStudentErrorText = document.querySelector("#editError");
+let saveEditButton = document.querySelector("#saveEditBtn");
 
 
 // =======================================================
@@ -169,8 +169,8 @@ function getNextStudentId() {
   if (allStudents.length === 0) return 0;
 
   let maxId = -1;
-  for (const student of allStudents) {
-    const idAsNumber = Number(student.id);
+  for (let student of allStudents) {
+    let idAsNumber = Number(student.id);
     if (Number.isFinite(idAsNumber) && idAsNumber > maxId) {
       maxId = idAsNumber;
     }
@@ -190,9 +190,9 @@ function getNextStudentId() {
   (سواء طالب جديد أو تعديل طالب موجود)
 */
 function createStudentObject(name, mathGrade, englishGrade, scienceGrade, existingStudent) {
-  const totalGrade = mathGrade + englishGrade + scienceGrade;
-  const averageGrade = totalGrade / 3;
-  const letterGrade = getLetterGrade(averageGrade);
+  let totalGrade = mathGrade + englishGrade + scienceGrade;
+  let averageGrade = totalGrade / 3;
+  let letterGrade = getLetterGrade(averageGrade);
 
   return {
     id: existingStudent?.id ?? getNextStudentId(),
@@ -231,10 +231,10 @@ function saveStudentsToLocalStorage() {
 */
 function loadStudentsFromLocalStorage() {
   try {
-    const savedText = localStorage.getItem(STORAGE_KEY);
+    let savedText = localStorage.getItem(STORAGE_KEY);
     if (!savedText) return [];
 
-    const savedArray = JSON.parse(savedText);
+    let savedArray = JSON.parse(savedText);
     if (!Array.isArray(savedArray)) return [];
 
     return savedArray.map((student) =>
@@ -264,8 +264,8 @@ function loadStudentsFromLocalStorage() {
   - الترتيب
 */
 function getDisplayedStudentsList() {
-  const searchText = searchByNameInput.value.trim().toLowerCase();
-  const selectedSortMode = sortModeSelect.value;
+  let searchText = searchByNameInput.value.trim().toLowerCase();
+  let selectedSortMode = sortModeSelect.value;
 
   let listToDisplay = [...allStudents];
 
@@ -360,10 +360,10 @@ studentForm.addEventListener("submit", (event) => {
   event.preventDefault();
   clearAddStudentError();
 
-  const name = studentNameInput.value.trim();
-  const math = Number(mathGradeInput.value);
-  const english = Number(englishGradeInput.value);
-  const science = Number(scienceGradeInput.value);
+  let name = studentNameInput.value.trim();
+  let math = Number(mathGradeInput.value);
+  let english = Number(englishGradeInput.value);
+  let science = Number(scienceGradeInput.value);
 
   if (!name) return showAddStudentError("Please enter a student name.");
   if (!isGradeValid(math) || !isGradeValid(english) || !isGradeValid(science)) {
@@ -396,11 +396,11 @@ sortModeSelect.addEventListener("change", refreshTableView);
 
 // Edit / Delete
 studentsTableBody.addEventListener("click", (event) => {
-  const button = event.target.closest("button");
+  let button = event.target.closest("button");
   if (!button) return;
 
-  const action = button.dataset.action;
-  const id = Number(button.dataset.id);
+  let action = button.dataset.action;
+  let id = Number(button.dataset.id);
 
   if (action === "delete") {
     allStudents = allStudents.filter((s) => s.id !== id);
@@ -410,7 +410,7 @@ studentsTableBody.addEventListener("click", (event) => {
 
   if (action === "edit") {
     studentIdBeingEdited = id;
-    const student = allStudents.find((s) => s.id === id);
+    let student = allStudents.find((s) => s.id === id);
     if (!student) return;
 
     editStudentNameInput.value = student.name;
@@ -424,17 +424,17 @@ studentsTableBody.addEventListener("click", (event) => {
 
 // حفظ التعديل
 saveEditButton.addEventListener("click", () => {
-  const name = editStudentNameInput.value.trim();
-  const math = Number(editMathGradeInput.value);
-  const english = Number(editEnglishGradeInput.value);
-  const science = Number(editScienceGradeInput.value);
+  let name = editStudentNameInput.value.trim();
+  let math = Number(editMathGradeInput.value);
+  let english = Number(editEnglishGradeInput.value);
+  let science = Number(editScienceGradeInput.value);
 
   if (!name || !isGradeValid(math) || !isGradeValid(english) || !isGradeValid(science)) {
     editStudentErrorText.textContent = "Invalid data.";
     return;
   }
 
-  const index = allStudents.findIndex((s) => s.id === studentIdBeingEdited);
+  let index = allStudents.findIndex((s) => s.id === studentIdBeingEdited);
   if (index === -1) return;
 
   allStudents[index] = createStudentObject(
